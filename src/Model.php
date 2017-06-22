@@ -6,7 +6,10 @@ include "Query.php";
 
 class Model
 {
-    private static $database = 'db';
+    /**
+     * @var string Name of the Database
+     */
+    public static $database = 'db';
     private $data;
 
     /**
