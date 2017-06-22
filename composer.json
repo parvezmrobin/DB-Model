@@ -1,6 +1,6 @@
 {
   "name": "parvezmrobin/db-model",
-  "description": "Retrieves MySQL database instances in an object oriented way",
+  "description": "Retrieves MySQL database instances SIMPLESTly in OOP style",
   "version": "0.0.1",
   "keywords": [
     "sql",
