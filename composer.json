@@ -1,0 +1,27 @@
+{
+  "name": "parvezmrobin/db-model",
+  "description": "Retrieves MySQL database instances in an object oriented way",
+  "version": "0.0.1",
+  "keywords": [
+    "sql",
+    "mysql",
+    "database",
+    "model",
+    "db"
+  ],
+  "license": "MIT",
+  "type": "library",
+  "authors": [
+    {
+      "name": "Parvez M Robin",
+      "email": "parvezmrobin@gmail.com",
+      "homepage": "https://github.com/parvezmrobin",
+      "role": "Developer"
+    }
+  ],
+  "autoload": {
+    "classmap": [
+      "src/"
+    ]
+  }
+}
