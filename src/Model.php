@@ -6,7 +6,7 @@ include "Query.php";
 
 class Model
 {
-    private static $database = 'scheduler';
+    private static $database = 'db';
     private $data;
 
     /**
