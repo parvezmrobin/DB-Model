@@ -19,10 +19,10 @@ class Query
     public function __construct($db, $host = 'localhost', $username = 'root', $password = '', $port = '3306')
     {
         $this->db = $db;
-        $this->host = $host;
-        $this->username = $username;
-        $this->password = $password;
-        $this->port = $port;
+        $this->host = $host ?: 'localhost';
+        $this->username = $username ?: 'root';
+        $this->password = $password ?: '';
+        $this->port = $port ?: '3306';
     }
 
     /**

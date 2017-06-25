@@ -7,9 +7,13 @@ include "Query.php";
 class Model
 {
     /**
-     * @var string Name of the Database
+     * @var string $host URL of database host
+     * @var string $database Name of database
+     * @var $username
+     * @var $password
+     * @var $port
      */
-    public static $database = 'db';
+    public static $host, $database, $username, $password, $port;
     private $data;
 
     /**
@@ -28,7 +32,7 @@ class Model
     /**
      * Retrieves all instances of given model
      * @param string $table Name of the table
-     * @param string $columns Columns to be selected
+     * @param array|string $columns Columns to be selected
      * @return \DbModel\Model[]
      */
     public static function all($table, $columns = '*')
@@ -40,12 +44,21 @@ class Model
      * Retrieves the models that matches the given conditions
      * @param string $table Name of the table
      * @param string $conditions Condition to be applied
-     * @param string $columns Columns to be selected
+     * @param array|string $columns Columns to be selected
      * @return \DbModel\Model[]
      */
     public static function where($table, $conditions = '1', $columns = '*')
     {
-        $query = new Query(static::$database);
+        $query = new Query(
+            static::$database,
+            static::$host,
+            static::$username,
+            static::$password,
+            static::$port
+        );
+        if (is_array($columns)) {
+            $columns = implode(', ', $columns);
+        }
         $results = $query->run("SELECT $columns FROM $table WHERE $conditions");
 
         $ret = [];
@@ -60,13 +73,22 @@ class Model
      * Retrieves a single model that matches given id
      * @param string $table Name of the table
      * @param string $id id
-     * @param string $columns Columns to be selected
+     * @param array|string $columns Columns to be selected
      * @param string $id_col_name Name of id column
      * @return \DbModel\Model
      */
     public static function find($table, $id, $id_col_name = 'id', $columns = '*')
     {
-        $query = new Query(static::$database);
+        $query = new Query(
+            static::$database,
+            static::$host,
+            static::$username,
+            static::$password,
+            static::$port
+        );
+        if (is_array($columns)) {
+            $columns = implode(', ', $columns);
+        }
         $result = $query->run("SELECT {$columns} FROM {$table} WHERE {$id_col_name} = '{$id}' LIMIT 1");
         return new static($result[0]);
     }
@@ -108,7 +130,7 @@ class Model
      * @param string $columns Columns to be selected
      * @return \DbModel\Model[]
      */
-    public function manyToMany($table, $intermediate, $intr_table_ref, $intr_local_ref, $table_id = 'id', $local_id = 'id', $columns = '*')
+    public function manyToMany($table, $intermediate, $intr_local_ref, $intr_table_ref, $local_id = 'id', $table_id = 'id', $columns = '*')
     {
         $cols = explode(',', $columns);
         foreach ($cols as $index => $col) {
