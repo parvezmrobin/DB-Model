@@ -1,6 +1,6 @@
 <?php
 
-namespace Database;
+namespace DbModel;
 
 include "Query.php";
 
@@ -29,7 +29,7 @@ class Model
      * Retrieves all instances of given model
      * @param string $table Name of the table
      * @param string $columns Columns to be selected
-     * @return \Database\Model[]
+     * @return \DbModel\Model[]
      */
     public static function all($table, $columns = '*')
     {
@@ -41,7 +41,7 @@ class Model
      * @param string $table Name of the table
      * @param string $conditions Condition to be applied
      * @param string $columns Columns to be selected
-     * @return \Database\Model[]
+     * @return \DbModel\Model[]
      */
     public static function where($table, $conditions = '1', $columns = '*')
     {
@@ -62,7 +62,7 @@ class Model
      * @param string $id id
      * @param string $columns Columns to be selected
      * @param string $id_col_name Name of id column
-     * @return \Database\Model
+     * @return \DbModel\Model
      */
     public static function find($table, $id, $id_col_name = 'id', $columns = '*')
     {
@@ -77,7 +77,7 @@ class Model
      * @param string $for_col Foreign key column name
      * @param string $ref_col Referenced key column name
      * @param string $columns Columns to be selected
-     * @return \Database\Model[]
+     * @return \DbModel\Model[]
      */
     public function oneToMany($table, $for_col, $ref_col = 'id', $columns = '*')
     {
@@ -106,7 +106,7 @@ class Model
      * @param string $intr_table_ref Reference of id of related model in intermediate table
      * @param string $intr_local_ref Referenced of id of current model in intermediate table
      * @param string $columns Columns to be selected
-     * @return \Database\Model[]
+     * @return \DbModel\Model[]
      */
     public function manyToMany($table, $intermediate, $intr_table_ref, $intr_local_ref, $table_id = 'id', $local_id = 'id', $columns = '*')
     {
