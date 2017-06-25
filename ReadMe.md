@@ -1,8 +1,10 @@
 # DB-Model
 ### Retrieves MySQL database instances SIMPLESTly in OOP style
 <hr>
+
 #### Initialize
 Set the database name
+
 ```
 \DbModel\Model::$database = 'database';
 ```
@@ -53,11 +55,13 @@ $columns = ['first_name', 'last_name'];
 $user = \DbModel\Model::find('users', '1', 'user_id', $columns);
 ```
 <hr>
+
 ### Retrieve using relation
 <kbd>DB-Model</kbd> Supports <kbd>One to Many</kbd>, <kbd>Many to One</kbd> and <kbd>Many to Many</kbd> relationship. However, you can use these methods to retrieve your <kbd>One to One relation as well.
 <blockquote>
 <kbd>oneToMany()</kbd>, <kbd>manyToOne()</kbd> and <kbd>manytoMany()</kbd> are instance method. Where <kbd>all()</kbd>, <kbd>where()</kbd> and <kbd>find()</kbd> are static method.
 </blockquote>
+
 #### One to Many
 Say, your <kbd>User</kbd> has many <kbd>Post</kbd>s. So, <kbd>Post</kbd>s must have a <kbd>user_id</kbd> field to store primary key of <kbd>User</kbd>. The <kbd>user_id</kbd> field in </kbd>Post is said <kbd>Foreign Key</kbd>. Again, <kbd>id</kbd> of <kbd>User</kbd> is said <kbd>Referenced Key</kbd> as it is referenced by <kbd>user_id</kbd> in <kbd>Post</kbd>.
 You can easily retrieve the <kbd>Post</kbd>s of <kbd>User</kbd> using <kbd>oneToMany()</kbd> method. The simplest form is
