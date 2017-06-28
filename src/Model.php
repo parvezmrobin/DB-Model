@@ -9,9 +9,9 @@ class Model
     /**
      * @var string $host URL of database host
      * @var string $database Name of database
-     * @var $username
-     * @var $password
-     * @var $port
+     * @var string $username
+     * @var string $password
+     * @var string $port
      */
     public static $host, $database, $username, $password, $port;
     private $data;
@@ -98,12 +98,13 @@ class Model
      * @param string $table Name of table of related model
      * @param string $for_col Foreign key column name
      * @param string $ref_col Referenced key column name
-     * @param string $columns Columns to be selected
+     * @param string|array $columns Columns to be selected
+     * @param string $conditions Conditions to be applied
      * @return \DbModel\Model[]
      */
-    public function oneToMany($table, $for_col, $ref_col = 'id', $columns = '*')
+    public function oneToMany($table, $for_col, $ref_col = 'id', $conditions = '1', $columns = '*')
     {
-        return static::where($table, "$for_col = '{$this->data[$ref_col]}'", $columns);
+        return static::where($table, "$for_col = '{$this->data[$ref_col]}' AND ($conditions)", $columns);
     }
 
     /**
@@ -111,7 +112,7 @@ class Model
      * @param string $table Name of table of related model
      * @param string $for_col Foreign key column name
      * @param string $ref_col Referenced key column name
-     * @param string $columns Columns to be selected
+     * @param string|array $columns Columns to be selected
      * @return Model
      */
     public function manyToOne($table, $for_col, $ref_col = 'id', $columns = '*')
@@ -128,9 +129,12 @@ class Model
      * @param string $intr_table_ref Reference of id of related model in intermediate table
      * @param string $intr_local_ref Referenced of id of current model in intermediate table
      * @param string $columns Columns to be selected
+     * @param string $conditions Condition to be applied
      * @return \DbModel\Model[]
      */
-    public function manyToMany($table, $intermediate, $intr_local_ref, $intr_table_ref, $local_id = 'id', $table_id = 'id', $columns = '*')
+    public function manyToMany($table, $intermediate, $intr_local_ref,
+                               $intr_table_ref, $local_id = 'id', $table_id = 'id',
+                               $conditions = '1', $columns = '*')
     {
         $cols = explode(',', $columns);
         foreach ($cols as $index => $col) {
@@ -140,8 +144,9 @@ class Model
 
         return static::where(
             "$table INNER JOIN $intermediate ON $table.$table_id = $intermediate.$intr_table_ref",
-            "$intermediate.$intr_local_ref = '{$this->data[$local_id]}'",
-            $columns);
+            "$intermediate.$intr_local_ref = '{$this->data[$local_id]}' AND ($conditions)",
+            $columns
+        );
     }
 
     /**

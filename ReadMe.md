@@ -43,7 +43,7 @@ $user = \DbModel\Model::find('users', 5);
 Note that <kbd>where()</kbd> and <kbd>all()</kbd> method returns array of instances where <kbd>find()</kbd> method returns a single instance.
 </blockquote>
 
-If your primary key is not name 'id', then you have to mention it.
+If your primary key is not named 'id', then you have to mention it.
 ```
 $user = \DbModel\Model::find('users', '1', 'user_id');
 ```
@@ -57,9 +57,9 @@ $user = \DbModel\Model::find('users', '1', 'user_id', $columns);
 <hr>
 
 ### Retrieve using relation
-<kbd>DB-Model</kbd> Supports <kbd>One to Many</kbd>, <kbd>Many to One</kbd> and <kbd>Many to Many</kbd> relationship. However, you can use these methods to retrieve your <kbd>One to One relation as well.
+<kbd>DB-Model</kbd> Supports <kbd>One to Many</kbd>, <kbd>Many to One</kbd> and <kbd>Many to Many</kbd> relationship. However, you can use these methods to retrieve your <kbd>One to One</kbd> relation as well.
 <blockquote>
-<kbd>oneToMany()</kbd>, <kbd>manyToOne()</kbd> and <kbd>manytoMany()</kbd> are instance method. Where <kbd>all()</kbd>, <kbd>where()</kbd> and <kbd>find()</kbd> are static method.
+Note that <kbd>oneToMany()</kbd>, <kbd>manyToOne()</kbd> and <kbd>manytoMany()</kbd> are instance method. Where <kbd>all()</kbd>, <kbd>where()</kbd> and <kbd>find()</kbd> are static method.
 </blockquote>
 
 #### One to Many
@@ -74,8 +74,14 @@ If primary key of <kbd>User</kbd> is not <kbd>id</kbd>, then you should guess wh
 $user = \DbModel\Model::find('users', '1', 'user_primary_key');
 $posts = $user->oneToMany('posts', 'user_id', 'user_primary_key');
 
+// To retrieve Post that contains 'ghost' in title
+
+$posts = $user->oneToMany('posts', 'user_id', 'user_primary_key',
+    'title LIKE "%ghost%"');
+
 // To retrieve title and body only
-$posts = $user->oneToMany('posts', 'user_id', 'user_primary_key', 'title, body');
+$posts = $user->oneToMany('posts', 'user_id', 'user_primary_key',
+    'TRUE', 'title, body');
 ```
 If you are clever enough, you should understand that, <kbd>oneToMany()</kbd> can also be used to store <kbd>one to one</kbd> relationship. If <kbd>Settings</kbd> has an <kbd>one to one</kbd> relationship with <kbd>User</kbd>, then each <kbd>User</kbd> will have exactly one <kbd>Settings</kbd>. So what are you waiting for?
 ```
@@ -104,7 +110,7 @@ $settings = \DbModel\Model::find('settings', '1');
 $user = $post->manyToOne('user', 'user_id', 'user_primary_key');
 ```
 #### Many to Many
-To implement <kbd>Many to Many</kbd> relationship in database you need a intermediate table which contains foreign key of both the related table. Suppose, <kbd>Post</kbd> has a many to many relationship with <kbd>Tag</kbd>. Then, you need an intermediate table, say <kbd>post_tag</kbd> which contains foreign key of <kbd>Post</kbd> and <kbd>Tag</kbd>, say <kbd>post_id</kbd> and <kbd>tag_id</kbd>. Now, your code will be
+To implement <kbd>Many to Many</kbd> relationship in database you need an intermediate table which contains foreign key of both the related tables. Suppose, <kbd>Post</kbd> has a many to many relationship with <kbd>Tag</kbd>. Then, you need an intermediate table, say <kbd>post_tag</kbd> which contains foreign key of <kbd>Post</kbd> and <kbd>Tag</kbd>, say <kbd>post_id</kbd> and <kbd>tag_id</kbd>. Now, your code will be
 ```
 $post = \DbModel\Model::find('posts', '1');
 $tags = $post->manytoMany('tags', 'post_tag', 'post_id', 'tag_id');
@@ -123,8 +129,35 @@ $tags = $post->manytoMany('tags', 'post_tag', 'post_id', 'tag_id',
 $tag = \DbModel\Model::find('tags', '1', 'tag_primary_key');
 $posts = $tag->manytoMany('posts', 'post_tag', 'tag_id', 'post_id',
     'tag_primary_key', 'post_primary_key');
+    
+// Select conditionally
+$posts = $tag->manytoMany('posts', 'post_tag', 'tag_id', 'post_id',
+    'tag_primary_key', 'post_primary_key', 'title LIKE "%ghost%"');
 
 // Select columns as well
 $posts = $tag->manytoMany('posts', 'post_tag', 'tag_id', 'post_id',
-    'tag_primary_key', 'post_primary_key', ['name', 'body']);
+    'tag_primary_key', 'post_primary_key',
+     'title LIKE "%ghost%"', ['name', 'body']);
+```
+### Customizing Connection Params
+There are five public static field that are used to connect with database. These are <kbd>$host</kbd>, <kbd>$database</kbd>, <kbd>$username</kbd>, <kbd>$password</kbd>, <kbd>$port</kbd>. The default values for these fields are
+```
+public static $host = 'localhost';
+public static $username = 'root';
+public static $password = '';
+public static $port = '3306';
+```
+You can change these values according to your database.
+### Running Raw Queries
+Although, not suggested, you can run raw queries using <kbd>\DbModel\Query</kbd> class. Simply make a <kbd>\DbModel\Query</kbd> instance and run your query.
+```
+$query = "SELECT * FROM table WHERE 1 = TRUE"
+$result = (new \DbModel\Query('database_name'))->run($query);
+
+foreach($result as $row) {
+    foreach($row as $key => $value) {
+        echo $key, ': ', $value;
+    }
+    echo '<br>';
+}
 ```
