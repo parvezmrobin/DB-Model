@@ -94,6 +94,87 @@ class Model
     }
 
     /**
+     * Stores a model to corresponding database table
+     * @param string $table Name of table of related model
+     * @return void
+     */
+    public function store($table)
+    {
+        $keys = implode(',', array_keys($this->data));
+        $values = implode(',', $this->data);
+        $sql = "INSERT INTO $table($keys) VALUES($values)";
+
+        $query = new Query(
+            static::$database,
+            static::$host,
+            static::$username,
+            static::$password,
+            static::$port
+        );
+
+        $query->run($sql);
+    }
+
+    /**
+     * Stores a model to corresponding database table
+     * @param string $table Name of table of related model
+     * @return void
+     */
+    public function create($table)
+    {
+        $this->store($table);
+    }
+
+    /**
+     * Stores a model to corresponding database table
+     * @param string $table Name of table of related model
+     * @return void
+     */
+    public function save($table)
+    {
+        $this->store($table);
+    }
+
+    /**
+     * Updates an existing model to corresponding database table
+     * @param string $table Name of table of related model
+     * @param string $condition Condition to be applied
+     * or array of conditions
+     * @return void
+     */
+    public function update($table, $condition)
+    {
+        $keys = array_keys($this->data);
+        $changes = array_map(function ($val) {
+            return "$val = {$this->data[$val]}";
+        }, $keys);
+        $changes = implode(', ', $changes);
+
+        $sql = "UPDATE $table SET $changes WHERE $condition";
+
+        $query = new Query(
+            static::$database,
+            static::$host,
+            static::$username,
+            static::$password,
+            static::$port
+        );
+
+        $query->run($sql);
+    }
+
+    /**
+     * Updates an existing model to corresponding database table by primary key
+     * @param string $table Name of table of related model
+     * @param string $primary_key Name of the primary key
+     * @return void
+     */
+    public function updateById($table, $primary_key = 'id')
+    {
+        $this->update($table, "$primary_key = {$this->data[$primary_key]}");
+    }
+
+    /**
      * Retrieves related models using one to many relationship
      * @param string $table Name of table of related model
      * @param string $for_col Foreign key column name

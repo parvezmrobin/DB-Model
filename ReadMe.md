@@ -139,6 +139,44 @@ $posts = $tag->manytoMany('posts', 'post_tag', 'tag_id', 'post_id',
     'tag_primary_key', 'post_primary_key',
      'title LIKE "%ghost%"', ['name', 'body']);
 ```
+
+### Insertion
+To insert a <kbd>Model</kbd> into database, simple just create a <kbd>Model</kbd> instance. Set the properties. Call the <kbd>store()</kbd> method.
+```
+$user = new Model();
+$user->name = 'Dennis Ritchie';
+$user->email = 'dennis@example.com';
+$user->password = 'pa$$word';
+$user->store('users');
+```
+
+> <kbd>store()</kbd> method has two aliases namely <kbd>insert()</kbd> and <kbd>save()</kbd> with same signature.
+
+### Updating
+Create a model. Set only properties to be updated. Call <kbd>update()</kbd> method with table name and the condition on which the update will be performed. And you are done!
+
+```
+$user = new Model();
+$user->name = 'Christian Bale';
+$user->update('users', 'id = 5');
+```
+>To avoid mistakes, <kbd>update()</kbd> method does not have a default <kbd>$condition</kbd> parameter.
+
+Want to update using the primary key? Then you will prefer the <kbd>updateById()</kbd> method.
+```
+$user = new Model();
+$user->id = 5;
+$user->name = 'Christian Bale';
+$user->updateById('users');
+```
+When your primary key is not <kbd>id</kbd> then you have to pass the name of primary key as the next argument.
+```
+$user = new Model();
+$user->primary_key = 5;
+$user->name = 'Christian Bale';
+$user->updateById('users', 'primary_key');
+```
+
 ### Customizing Connection Params
 There are five public static field that are used to connect with database. These are <kbd>$host</kbd>, <kbd>$database</kbd>, <kbd>$username</kbd>, <kbd>$password</kbd>, <kbd>$port</kbd>. The default values for these fields are
 ```
