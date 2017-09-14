@@ -59,9 +59,10 @@ class Model implements JsonSerializable
      * @param string $table Name of the table
      * @param string $conditions Condition to be applied
      * @param array|string $columns Columns to be selected
-     * @return \DbModel\Model[]
+     * @param string $extra
+     * @return Model[]
      */
-    public static function where($table, $conditions = '1', $columns = '*')
+    public static function where($table, $conditions = '1', $columns = '*', $extra = '')
     {
         $query = new Query(
             static::$database,
@@ -73,7 +74,7 @@ class Model implements JsonSerializable
         if (is_array($columns)) {
             $columns = implode(', ', $columns);
         }
-        $results = $query->run("SELECT $columns FROM $table WHERE $conditions");
+        $results = $query->run("SELECT $columns FROM $table WHERE $conditions $extra");
 
         $ret = [];
         foreach ($results as $result) {
