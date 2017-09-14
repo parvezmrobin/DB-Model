@@ -109,6 +109,28 @@ class Model implements JsonSerializable
     }
 
     /**
+     * Counts the number of models in corresponding database table
+     * @param string $table Name of the table
+     * @param string $conditions Condition to be applied
+     * @return int
+     */
+    public static function count($table, $conditions = '1')
+    {
+        return (int)static::where($table, $conditions, 'count(*) as count')[0]->count;
+    }
+
+    /**
+     * Checks if a model exists or not
+     * @param string $table Name of the table
+     * @param string $conditions Condition to be applied
+     * @return bool
+     */
+    public static function exists($table, $conditions = '1')
+    {
+        return static::where($table, $conditions, 'count(*) as count')[0]->count > 0;
+    }
+
+    /**
      * Stores a model to corresponding database table
      * @param string $table Name of table of related model
      * @return void
