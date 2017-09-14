@@ -2,7 +2,9 @@
 
 namespace DbModel;
 
-class Model
+use JsonSerializable;
+
+class Model implements JsonSerializable
 {
     /**
      * @var string $host URL of database host
@@ -18,7 +20,7 @@ class Model
      * Model constructor.
      * @param $data array
      */
-    public function __construct($data)
+    public function __construct($data = [])
     {
         if (is_null($data)) {
             $this->data = [];
@@ -246,5 +248,17 @@ class Model
     function __set($name, $value)
     {
         $this->data[$name] = $value;
+    }
+
+    /**
+     * Specify data which should be serialized to JSON
+     * @link http://php.net/manual/en/jsonserializable.jsonserialize.php
+     * @return mixed data which can be serialized by <b>json_encode</b>,
+     * which is a value of any type other than a resource.
+     * @since 5.4.0
+     */
+    function jsonSerialize()
+    {
+        return $this->data;
     }
 }
