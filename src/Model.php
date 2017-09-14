@@ -204,6 +204,27 @@ class Model implements JsonSerializable
     }
 
     /**
+     * Deletes an existing model from corresponding database table
+     * @param string $table Name of table of related model
+     * @param string $condition Condition to be applied
+     * @return void
+     */
+    public static function delete($table, $condition)
+    {
+        $sql = "DELETE FROM $table WHERE $condition";
+
+        $query = new Query(
+            static::$database,
+            static::$host,
+            static::$username,
+            static::$password,
+            static::$port
+        );
+
+        $query->run($sql);
+    }
+
+    /**
      * Updates an existing model to corresponding database table by primary key
      * @param string $table Name of table of related model
      * @param string $primary_key Name of the primary key
