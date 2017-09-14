@@ -236,6 +236,17 @@ class Model implements JsonSerializable
     }
 
     /**
+     * Deletes an existing model from corresponding database table by primary key
+     * @param string $table Name of table of related model
+     * @param string $primary_key Name of the primary key
+     * @return void
+     */
+    public function deleteById($table, $primary_key = 'id')
+    {
+        static::delete($table, "$primary_key = \"{$this->data[$primary_key]}\"");
+    }
+
+    /**
      * Retrieves related models using one to many relationship
      * @param string $table Name of table of related model
      * @param string $for_col Foreign key column name
