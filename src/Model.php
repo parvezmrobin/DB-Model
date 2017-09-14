@@ -2,8 +2,6 @@
 
 namespace DbModel;
 
-include "Query.php";
-
 class Model
 {
     /**
