@@ -323,6 +323,18 @@ class Model implements JsonSerializable
     }
 
     /**
+     * Sets a property using builder pattern
+     * @param string $name Name of attribute
+     * @param string $value Value of attribute
+     * @return $this
+     */
+    public function set($name, $value)
+    {
+        $this->data[$name] = $value;
+        return $this;
+    }
+
+    /**
      * Specify data which should be serialized to JSON
      * @link http://php.net/manual/en/jsonserializable.jsonserialize.php
      * @return mixed data which can be serialized by <b>json_encode</b>,
