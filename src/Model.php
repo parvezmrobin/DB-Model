@@ -232,7 +232,7 @@ class Model implements JsonSerializable
      */
     public function updateById($table, $primary_key = 'id')
     {
-        $this->update($table, "$primary_key = {$this->data[$primary_key]}");
+        $this->update($table, "$primary_key = \"{$this->data[$primary_key]}\"");
     }
 
     /**
