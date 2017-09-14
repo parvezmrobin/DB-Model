@@ -137,6 +137,9 @@ class Model implements JsonSerializable
      */
     public function store($table)
     {
+        foreach ($this->data as &$datum) {
+            $datum = '"' . $datum . '"';
+        }
         $keys = implode(',', array_keys($this->data));
         $values = implode(',', $this->data);
         $sql = "INSERT INTO $table($keys) VALUES($values)";
