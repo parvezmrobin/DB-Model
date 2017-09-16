@@ -47,7 +47,7 @@ class Model implements JsonSerializable
      * Retrieves all instances of given model
      * @param string $table Name of the table
      * @param array|string $columns Columns to be selected
-     * @return \DbModel\Model[]
+     * @return ModelCollection
      */
     public static function all($table, $columns = '*')
     {
@@ -60,7 +60,7 @@ class Model implements JsonSerializable
      * @param string $conditions Condition to be applied
      * @param array|string $columns Columns to be selected
      * @param string $extra
-     * @return Model[]
+     * @return ModelCollection
      */
     public static function where($table, $conditions = '1', $columns = '*', $extra = '')
     {
@@ -81,7 +81,7 @@ class Model implements JsonSerializable
             array_push($ret, new static($result));
         }
 
-        return $ret;
+        return new ModelCollection($ret);
     }
 
     /**
@@ -253,7 +253,7 @@ class Model implements JsonSerializable
      * @param string $ref_col Referenced key column name
      * @param string|array $columns Columns to be selected
      * @param string $conditions Conditions to be applied
-     * @return \DbModel\Model[]
+     * @return ModelCollection
      */
     public function oneToMany($table, $for_col, $ref_col = 'id', $conditions = '1', $columns = '*')
     {
@@ -283,7 +283,7 @@ class Model implements JsonSerializable
      * @param string $intr_local_ref Referenced of id of current model in intermediate table
      * @param string $columns Columns to be selected
      * @param string $conditions Condition to be applied
-     * @return \DbModel\Model[]
+     * @return ModelCollection
      */
     public function manyToMany($table, $intermediate, $intr_local_ref,
                                $intr_table_ref, $local_id = 'id', $table_id = 'id',
