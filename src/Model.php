@@ -117,7 +117,10 @@ class Model implements JsonSerializable
     public static function count($table, $conditions = '1')
     {
         $query = new Query(static::$database);
-        $result = $query->start("SELECT * FROM $table WHEN $conditions");
+        $result = $query->start("SELECT * FROM $table WHERE $conditions");
+        if (!$result) {
+            return false;
+        }
         $count = $result->num_rows;
         $query->stop();
         return $count;
