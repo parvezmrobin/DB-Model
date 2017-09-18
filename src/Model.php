@@ -116,7 +116,11 @@ class Model implements JsonSerializable
      */
     public static function count($table, $conditions = '1')
     {
-        return (int)static::where($table, $conditions, 'count(*) as count')[0]->count;
+        $query = new Query(static::$database);
+        $result = $query->start("SELECT * FROM $table WHEN $conditions");
+        $count = $result->num_rows;
+        $query->stop();
+        return $count;
     }
 
     /**

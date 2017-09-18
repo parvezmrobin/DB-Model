@@ -142,4 +142,9 @@ class ModelCollection implements \IteratorAggregate
             yield $model;
         }
     }
+
+    public function count()
+    {
+        return count($this->models);
+    }
 }
