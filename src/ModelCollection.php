@@ -95,7 +95,7 @@ class ModelCollection implements \IteratorAggregate
      */
     public function manyToOne($table, $for_col, $ref_col = 'id', $columns = '*')
     {
-        $ins = implode(",", $this->only($ref_col));
+        $ins = implode(",", $this->only($for_col));
         return Model::where($table, "$ref_col IN ($ins)", $columns);
     }
 
@@ -133,7 +133,7 @@ class ModelCollection implements \IteratorAggregate
      * Retrieve an external iterator
      * @link http://php.net/manual/en/iteratoraggregate.getiterator.php
      * @return Traversable An instance of an object implementing <b>Iterator</b> or
-     * <b>Traversable</b>
+     * <b>Iterator</b>
      * @since 5.0.0
      */
     public function getIterator()
