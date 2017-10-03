@@ -36,11 +36,11 @@ class ModelCollection implements \IteratorAggregate
      * @param $arrays
      * @return ModelCollection
      */
-    public function createFromArray($arrays)
+    public static function createFromArray($arrays)
     {
         $models = [];
         foreach ($arrays as $array) {
-            $models[] = Model::createFromArray($array);
+            $models[] = is_a($array, Model::class) ? $array : Model::createFromArray($array);
         }
 
         return new ModelCollection($models);

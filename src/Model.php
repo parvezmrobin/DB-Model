@@ -109,6 +109,25 @@ class Model implements JsonSerializable
     }
 
     /**
+     * Runs a raw SQL and gets the result
+     * @param string $sql
+     * @return ModelCollection
+     */
+    public static function raw($sql)
+    {
+        $query = new Query(
+            static::$database,
+            static::$host,
+            static::$username,
+            static::$password,
+            static::$port
+        );
+        $result = $query->run($sql);
+
+        return ModelCollection::createFromArray($result);
+    }
+
+    /**
      * Counts the number of models in corresponding database table
      * @param string $table Name of the table
      * @param string $conditions Condition to be applied
