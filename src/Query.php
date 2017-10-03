@@ -51,7 +51,7 @@ class Query
         $result = $this->connection->query($query);
 
         if ($result === false) {
-            throw new \Exception($this->connection->error);
+            throw new \Exception($this->connection->error . "<b>Query</b>: " . $query);
         }
 
         return $result;
