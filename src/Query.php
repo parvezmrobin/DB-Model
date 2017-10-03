@@ -42,12 +42,17 @@ class Query
     /**
      * Start a database query
      * @param string $query query to be executed
-     * @return mysqli_result|boolean
+     * @return bool|mysqli_result
+     * @throws \Exception
      */
     public function start($query)
     {
         $this->connection = new \mysqli($this->host, $this->username, $this->password, $this->db, $this->port);
         $result = $this->connection->query($query);
+
+        if ($result === false) {
+            throw new \Exception($this->connection->error);
+        }
 
         return $result;
     }
