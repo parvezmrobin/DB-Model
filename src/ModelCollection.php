@@ -96,6 +96,9 @@ class ModelCollection implements \IteratorAggregate
     public function manyToOne($table, $for_col, $ref_col = 'id', $columns = '*')
     {
         $ins = implode(",", $this->only($for_col));
+        if (is_array($columns)) {
+            $columns = implode(",", $columns);
+        }
         return Model::where($table, "$ref_col IN ($ins)", $columns);
     }
 
