@@ -30,17 +30,13 @@ class Model implements JsonSerializable
     }
 
     /**
-     * Creates an array of Model using given data
-     * @param array $arrays Array containing the arrays of data
-     * @return Model[]
+     * Creates a Model using given data
+     * @param array $array Array containing the arrays of data
+     * @return Model
      */
-    public static function createFromArray($arrays)
+    public static function createFromArray($array)
     {
-        $instances = [];
-        foreach ($arrays as $array) {
-            $instances[] = new Model($array);
-        }
-        return $instances;
+        return new static($array);
     }
 
     /**
