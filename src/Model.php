@@ -208,7 +208,7 @@ class Model implements JsonSerializable
     {
         $keys = array_keys($this->data);
         $changes = array_map(function ($val) {
-            return "$val = {$this->data[$val]}";
+            return "$val = '{$this->data[$val]}'";
         }, $keys);
         $changes = implode(', ', $changes);
 
