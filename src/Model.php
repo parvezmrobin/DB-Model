@@ -155,7 +155,7 @@ class Model implements JsonSerializable
     /**
      * Stores a model to corresponding database table
      * @param string $table Name of table of related model
-     * @return void
+     * @return array|bool
      */
     public function store($table)
     {
@@ -174,27 +174,27 @@ class Model implements JsonSerializable
             static::$port
         );
 
-        $query->run($sql);
+        return $query->run($sql);
     }
 
     /**
      * Stores a model to corresponding database table
      * @param string $table Name of table of related model
-     * @return void
+     * @return array|bool
      */
     public function create($table)
     {
-        $this->store($table);
+        return $this->store($table);
     }
 
     /**
      * Stores a model to corresponding database table
      * @param string $table Name of table of related model
-     * @return void
+     * @return array|bool
      */
     public function save($table)
     {
-        $this->store($table);
+        return $this->store($table);
     }
 
     /**

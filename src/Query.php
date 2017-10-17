@@ -33,7 +33,16 @@ class Query
     public function run($query)
     {
         $result = $this->start($query);
-        $ret = (is_bool($result)) ? $result : $result->fetch_all(MYSQLI_BOTH);
+        if (is_bool($result)) {
+            if ($result === true) {
+                $ret = $this->connection->insert_id;
+            } else {
+                $ret = false;
+            }
+        } else {
+            $ret = $result->fetch_all(MYSQLI_BOTH);
+        }
+
         $this->stop();
 
         return $ret;
