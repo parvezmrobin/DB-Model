@@ -127,7 +127,7 @@ class ModelCollection implements \IteratorAggregate
 
         return Model::where(
             "$table INNER JOIN $intermediate ON $table.$table_id = $intermediate.$intr_table_ref",
-            "$intermediate.$intr_local_ref IN '($ins)' AND ($conditions)",
+            "$intermediate.$intr_local_ref IN ($ins) AND ($conditions)",
             $columns
         );
     }
