@@ -2,10 +2,15 @@
 
 namespace DbModel;
 
+use mysqli_result;
+
 class Query
 {
 
     private $host, $db, $username, $password, $port;
+    /**
+     * @var \mysqli $connection
+     */
     private $connection;
 
     /**
@@ -16,7 +21,9 @@ class Query
      * @param string $password
      * @param string $port
      */
-    public function __construct($db, $host = 'localhost', $username = 'root', $password = '', $port = '3306')
+    public function __construct(
+        $db, $host = 'localhost', $username = 'root', $password = '', $port = '3306'
+    )
     {
         $this->db = $db;
         $this->host = $host ?: 'localhost';
@@ -60,7 +67,7 @@ class Query
         $result = $this->connection->query($query);
 
         if ($result === false) {
-            throw new \Exception($this->connection->error . "Query: " . $query);
+            throw new \Exception($this->connection->error . " Query: " . $query);
         }
 
         return $result;
@@ -74,5 +81,24 @@ class Query
         if ($this->connection !== null) {
             $this->connection->close();
         }
+    }
+
+    /**
+     * Get the last auto increment id of last insertion
+     * @return mixed
+     */
+    public function getLastId()
+    {
+        return $this->connection->insert_id;
+    }
+
+
+    /**
+     * Get the last error
+     * @return string
+     */
+    public function getLastError()
+    {
+        return $this->connection->error;
     }
 }
