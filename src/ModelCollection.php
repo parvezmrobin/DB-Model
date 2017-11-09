@@ -9,11 +9,9 @@
 namespace DbModel;
 
 
-use Traversable;
-
 class ModelCollection implements \IteratorAggregate
 {
-    private $models = [];
+    protected $models = [];
 
     /**
      * ModelCollection constructor.
@@ -22,14 +20,6 @@ class ModelCollection implements \IteratorAggregate
     public function __construct($models = [])
     {
         $this->models = $models;
-    }
-
-    /**
-     * @param Model $model
-     */
-    public function addModel(Model $model)
-    {
-        $this->models[] = $model;
     }
 
     /**
@@ -44,6 +34,29 @@ class ModelCollection implements \IteratorAggregate
         }
 
         return new ModelCollection($models);
+    }
+
+    /**
+     * @param Model $model
+     */
+    public function addModel(Model $model)
+    {
+        $this->models[] = $model;
+    }
+
+    /**
+     * Retrieves related models using one to many relationship
+     * @param string $table Name of table of related model
+     * @param string $for_col Foreign key column name
+     * @param string $ref_col Referenced key column name
+     * @param string|array $columns Columns to be selected
+     * @param string $conditions Conditions to be applied
+     * @return ModelCollection
+     */
+    public function oneToMany($table, $for_col, $ref_col = 'id', $conditions = '1', $columns = '*')
+    {
+        $ins = implode(",", $this->only($ref_col));
+        return Model::where($table, "$for_col IN '($ins)' AND ($conditions)", $columns);
     }
 
     /**
@@ -68,21 +81,6 @@ class ModelCollection implements \IteratorAggregate
             }
         }
         return $instances;
-    }
-
-    /**
-     * Retrieves related models using one to many relationship
-     * @param string $table Name of table of related model
-     * @param string $for_col Foreign key column name
-     * @param string $ref_col Referenced key column name
-     * @param string|array $columns Columns to be selected
-     * @param string $conditions Conditions to be applied
-     * @return ModelCollection
-     */
-    public function oneToMany($table, $for_col, $ref_col = 'id', $conditions = '1', $columns = '*')
-    {
-        $ins = implode(",", $this->only($ref_col));
-        return Model::where($table, "$for_col IN '($ins)' AND ($conditions)", $columns);
     }
 
     /**
@@ -130,6 +128,21 @@ class ModelCollection implements \IteratorAggregate
             "$intermediate.$intr_local_ref IN ($ins) AND ($conditions)",
             $columns
         );
+    }
+
+    public function groupBy($column)
+    {
+        $groups = [];
+
+        foreach ($this->models as $model) {
+            if (is_null($groups[$model->$column])) {
+                $groups[$model->$column] = new ModelCollection();
+            }
+
+            $groups[$model->$column]->addModel($model);
+        }
+
+        return $groups;
     }
 
     /**
