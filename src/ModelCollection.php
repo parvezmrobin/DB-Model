@@ -130,6 +130,10 @@ class ModelCollection implements \IteratorAggregate
         );
     }
 
+    /**
+     * @param string $column
+     * @return ModelCollection[]
+     */
     public function groupBy($column)
     {
         $groups = [];
