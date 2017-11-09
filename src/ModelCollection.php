@@ -139,7 +139,7 @@ class ModelCollection implements \IteratorAggregate
         $groups = [];
 
         foreach ($this->models as $model) {
-            if (is_null($groups[$model->$column])) {
+            if (!key_exists($model->$column, $groups)) {
                 $groups[$model->$column] = new ModelCollection();
             }
 
