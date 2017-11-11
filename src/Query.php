@@ -64,6 +64,7 @@ class Query
     public function start($query)
     {
         $this->connection = new \mysqli($this->host, $this->username, $this->password, $this->db, $this->port);
+        $query = $this->connection->real_escape_string($query);
         $result = $this->connection->query($query);
 
         if ($result === false) {
